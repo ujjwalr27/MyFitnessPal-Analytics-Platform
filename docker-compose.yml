@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Flask application
+  flask-app:
+    build: .
+    container_name: myfitnessapp-flask
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=backend/app.py
+      - FLASK_ENV=production
+      - DB_USER=postgres
+      - DB_PASSWORD=ujjwal
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=myfitnessdb
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+    networks:
+      - myfitnessapp-network
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:17
+    container_name: myfitnessapp-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=ujjwal
+      - POSTGRES_DB=myfitnessdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - myfitnessapp-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: myfitnessapp-grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/nutrition_dashboard.json
+    
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards/nutrition_dashboard.json:/var/lib/grafana/dashboards/nutrition_dashboard.json
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - postgres
+    networks:
+      - myfitnessapp-network
+
+networks:
+  myfitnessapp-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  grafana-data: 

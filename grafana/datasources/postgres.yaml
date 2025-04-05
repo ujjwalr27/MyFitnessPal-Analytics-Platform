@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: grafana-postgresql-datasource
+    type: postgres
+    url: postgres:5432
+    user: postgres
+    secureJsonData:
+      password: ujjwal
+    jsonData:
+      database: myfitnessdb
+      sslmode: disable
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleTimeSec: 3600
+      connMaxLifetimeSec: 14400
+    isDefault: true
+    editable: true 

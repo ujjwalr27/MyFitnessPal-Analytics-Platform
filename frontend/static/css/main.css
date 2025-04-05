@@ -1,0 +1,68 @@
+/* Custom styles for MyFitnessPal Data Analyzer */
+
+body {
+    background-color: #f8f9fa;
+    padding-bottom: 50px;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    padding: 1.5rem;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    border-color: #bee5eb;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+    transform: translateY(-2px);
+}
+
+.btn-outline-success {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    transform: translateY(-2px);
+}
+
+/* File input styling */
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+}
+
+/* Status message animations */
+#status-message .alert {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+} 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFitnessPal Data Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="text-center mb-0">MyFitnessPal Data Analyzer</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead text-center">Upload your MyFitnessPal CSV export to analyze your nutrition and exercise data.</p>
+                        
+                        <div class="alert alert-info">
+                            <h5>Instructions:</h5>
+                            <ol>
+                                <li>Export your data from MyFitnessPal as a CSV file</li>
+                                <li>Ensure your CSV contains the following columns:
+                                    <ul class="mt-1 small">
+                                        <li><strong>First column:</strong> User ID (numeric identifier for each user)</li>
+                                        <li><strong>Second column:</strong> Date (in format DD-MM-YYYY or YYYY-MM-DD)</li>
+                                        <li><strong>Additional columns:</strong> Nutrition data (can be JSON formatted)</li>
+                                    </ul>
+                                </li>
+                                <li>Upload the CSV file using the form below</li>
+                                <li>After processing, you'll be able to view your data in the Grafana dashboard</li>
+                            </ol>
+                            <div class="mt-2 small">
+                                <strong>Note:</strong> The system can handle multiple users in a single CSV file. If multiple users are detected, you'll be prompted to select which user's data to view.
+                            </div>
+                        </div>
+                        
+                        <form id="upload-form" class="mt-4">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Select MyFitnessPal CSV file:</label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                                <div class="form-text">Only CSV files are accepted. The file should contain user IDs, dates, and nutrition data.</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">Upload and Process</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Upload Status Messages -->
+                        <div id="status-message" class="mt-4" style="display: none;"></div>
+                        
+                        <!-- Success Section (initially hidden) -->
+                        <div id="success-section" class="mt-4" style="display: none;">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">Data Successfully Processed!</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Your fitness data has been successfully uploaded and processed. You can now view your dashboard in Grafana.</p>
+                                    
+                                    <!-- Link to Grafana Dashboard with user ID parameter -->
+                                    <div class="text-center">
+                                        <a id="grafana-link" href="http://localhost:3001/d/nutrition/nutrition-dashboard" class="btn btn-success btn-lg" target="_blank">
+                                            <i class="bi bi-bar-chart-fill"></i> View Your Fitness Dashboard
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Multiple User Selection will appear here when needed -->
+                        
+                        <!-- Always visible link to Grafana, but lower priority -->
+                        <div class="text-center mt-4">
+                            <hr>
+                            <p class="text-muted">Direct access to Grafana dashboard:</p>
+                            <a href="http://localhost:3001" class="btn btn-outline-secondary" target="_blank">
+                                Grafana Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Section -->
+                <div class="card mt-4">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">Frequently Asked Questions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        What format should my CSV file be in?
+                                    </button>
+                                </h2>
+                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Your CSV file should contain columns for user ID, date, and nutrition data. The application can handle various date formats and complex JSON data structures from MyFitnessPal exports.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        How do I export data from MyFitnessPal?
+                                    </button>
+                                </h2>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Log in to your MyFitnessPal account, go to your profile, select "Settings" and then look for the "Export Data" option. Download the file as CSV format.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        Is my data secure?
+                                    </button>
+                                </h2>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes, your data is stored in a local PostgreSQL database and is not shared with any third parties. The CSV file is deleted from the server after processing.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

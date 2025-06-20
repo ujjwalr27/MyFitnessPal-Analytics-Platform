@@ -109,61 +109,8 @@ To enable the Docker Hub integration, add these secrets to your GitHub repositor
 pip install pytest pytest-cov flake8
 
 # Run linting
-flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=backend/venv/*,backend/__pycache__/*,*/__pycache__/*,*/site-packages/*
+flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venv,backend/venv,__pycache__,site-packages
 
 # Run tests
 pytest backend/ --cov=backend
 ```
-
-## Project Structure
-
-```
-myfitnessapp/
-├── .github/                # GitHub configuration
-│   └── workflows/          # CI/CD workflow definitions
-│       ├── ci.yml          # Continuous Integration workflow
-│       └── cd.yml          # Continuous Deployment workflow
-├── backend/                # Flask application
-│   ├── app.py              # Main application entry
-│   ├── config.py           # Configuration settings
-│   ├── requirements.txt    # Python dependencies
-│   ├── test_app.py         # Application tests
-│   ├── conftest.py         # Test configuration
-│   ├── utils/              # Utility modules
-│   └── routes/             # API endpoints
-├── frontend/               # Web interface
-│   ├── static/             # CSS, JS, and other assets
-│   └── templates/          # HTML templates
-├── grafana/                # Grafana configuration
-│   ├── dashboards/         # Dashboard definitions
-│   └── datasources/        # Data source configurations
-├── docker-compose.yml      # Container orchestration
-├── Dockerfile              # Flask app container
-└── .gitignore              # Git ignore configuration
-```
-
-## Security Considerations
-
-- The application uses basic authentication for Grafana
-- Database credentials are stored in environment variables
-- File uploads are validated for type and size
-
-## Troubleshooting
-
-**Database Connection Issues:**
-- Ensure PostgreSQL container is running
-- Check database credentials in docker-compose.yml
-
-**CSV Import Errors:**
-- Verify your CSV is a valid MyFitnessPal export
-- Check that required columns are present (Date, Calories, Carbs, Fat, Protein)
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-- MyFitnessPal for providing exportable nutrition data
-- Grafana for the visualization platform
-- The Flask and PostgreSQL communities for excellent documentation 

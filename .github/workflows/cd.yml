@@ -33,19 +33,9 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-    - name: Set Docker image name
-      id: image_name
-      run: |
-        # Default to a local tag if no DockerHub username is provided
-        if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]; then
-          echo "IMAGE_TAG=myfitnessapp:latest" >> $GITHUB_ENV
-        else
-          echo "IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/myfitnessapp:latest" >> $GITHUB_ENV
-        fi
-        
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
         context: .
-        push: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '' }}
-        tags: ${{ env.IMAGE_TAG }} 
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/myfitnessapp:latest 

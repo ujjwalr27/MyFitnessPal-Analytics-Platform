@@ -1,3 +1,4 @@
+# .github/workflows/cd-pipeline.yml
 name: CD Pipeline
 
 on:
@@ -41,5 +42,6 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
+          # ONLY this one fully-qualified tag—no commas, no extra blank lines:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/myfitnessapp:latest

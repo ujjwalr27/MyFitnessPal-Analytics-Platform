@@ -109,7 +109,7 @@ To enable the Docker Hub integration, add these secrets to your GitHub repositor
 pip install pytest pytest-cov flake8
 
 # Run linting
-flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venv/,*/__pycache__/*
+flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=backend/venv/*,backend/__pycache__/*,*/__pycache__/*,*/site-packages/*
 
 # Run tests
 pytest backend/ --cov=backend

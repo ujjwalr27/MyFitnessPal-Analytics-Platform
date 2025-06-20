@@ -11,8 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Setup Docker Compose
+      uses: ndeloof/install-compose-action@v0.0.1
+      
     - name: Build Docker image
-      run: docker-compose build
+      run: docker compose build
       
   deploy:
     runs-on: ubuntu-latest

@@ -79,26 +79,67 @@ The application includes pre-configured dashboards for:
 - Macronutrient breakdown (carbs, protein, fat)
 - Nutritional trends over time
 
+## CI/CD Pipeline
 
+This project includes a complete CI/CD pipeline using GitHub Actions:
 
-### Project Structure
+### Continuous Integration
+
+- **Automated Testing**: All tests run on push and pull requests to the main branch
+- **Code Quality**: Linting with flake8 ensures code standards
+- **Database Integration**: Tests run against a PostgreSQL service container
+
+### Continuous Deployment
+
+- **Docker Build**: Automatically builds Docker images on successful code merge
+- **Docker Registry**: Images are pushed to Docker Hub registry
+- **Deployment Ready**: Pipeline prepared for extension to your preferred hosting platform
+
+### Setup GitHub Secrets
+
+To enable the Docker Hub integration, add these secrets to your GitHub repository:
+
+1. `DOCKERHUB_USERNAME`: Your Docker Hub username
+2. `DOCKERHUB_TOKEN`: Your Docker Hub access token
+
+### Running Tests Locally
+
+```bash
+# Install test dependencies
+pip install pytest pytest-cov flake8
+
+# Run linting
+flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
+
+# Run tests
+pytest backend/ --cov=backend
+```
+
+## Project Structure
 
 ```
 myfitnessapp/
-├── backend/                 # Flask application
-│   ├── app.py               # Main application entry
-│   ├── config.py            # Configuration settings
-│   ├── requirements.txt     # Python dependencies
-│   ├── utils/               # Utility modules
-│   └── routes/              # API endpoints
-├── frontend/                # Web interface
-│   ├── static/              # CSS, JS, and other assets
-│   └── templates/           # HTML templates
-├── grafana/                 # Grafana configuration
-│   ├── dashboards/          # Dashboard definitions
-│   └── datasources/         # Data source configurations
-├── docker-compose.yml       # Container orchestration
-└── Dockerfile               # Flask app container
+├── .github/                # GitHub configuration
+│   └── workflows/          # CI/CD workflow definitions
+│       ├── ci.yml          # Continuous Integration workflow
+│       └── cd.yml          # Continuous Deployment workflow
+├── backend/                # Flask application
+│   ├── app.py              # Main application entry
+│   ├── config.py           # Configuration settings
+│   ├── requirements.txt    # Python dependencies
+│   ├── test_app.py         # Application tests
+│   ├── conftest.py         # Test configuration
+│   ├── utils/              # Utility modules
+│   └── routes/             # API endpoints
+├── frontend/               # Web interface
+│   ├── static/             # CSS, JS, and other assets
+│   └── templates/          # HTML templates
+├── grafana/                # Grafana configuration
+│   ├── dashboards/         # Dashboard definitions
+│   └── datasources/        # Data source configurations
+├── docker-compose.yml      # Container orchestration
+├── Dockerfile              # Flask app container
+└── .gitignore              # Git ignore configuration
 ```
 
 ## Security Considerations
